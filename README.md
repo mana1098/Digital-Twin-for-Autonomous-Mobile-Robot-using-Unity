@@ -35,11 +35,11 @@ August 2022 - November 2022
 
 ## Contributors
 
-[Your Name]
+Manali Jain
 
 ## License
 
-[Specify the license here, e.g., MIT, GPL, etc.]
+GNU V2
 
 ---
 
