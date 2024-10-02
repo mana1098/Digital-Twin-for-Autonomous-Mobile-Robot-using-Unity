@@ -1,0 +1,65 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System.IO.Ports;
+
+
+public class carbot : MonoBehaviour
+{
+     SerialPort stream = new SerialPort ("COM5", 115200);
+    // Start is called before the first frame update
+    Vector3 lastData = Vector3.zero;
+    Quaternion new_rotation;
+     Vector3 unit_previous_heading_vec;
+     Vector3 previous_heading_vec;
+       public GameObject obstacle;
+       int counter = 0;
+
+
+    void Start()
+    {
+        stream.Open();
+        previous_heading_vec = Vector3.forward;
+
+
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        
+        string value=stream.ReadLine(); 
+
+        int l = value.Length;
+        if(l>2)
+        {
+            Debug.Log(value);
+            string[] orientationData = value.Split(',');
+            float roll = float.Parse(orientationData[0]);
+            float pitch = float.Parse(orientationData[1]);
+            float yaw = float.Parse(orientationData[2]);
+            //lastData = new Vector3(0,pitch,0);
+            //new_rotation = Quaternion.Euler(new Vector3(0,pitch,0));
+            transform.localEulerAngles = new Vector3(0,pitch,0);
+            //transform.eulerAngles= new Vector3(0,pitch,0);
+            //transform.localPosition = transform.localPosition + new Vector3(0.0f,0,-0.02f);
+            //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(lastData), Time.deltaTime * 2f);
+            //transform.rotation = Quaternion.Slerp(transform.rotation, (transform.rotation*new_rotation), Time.deltaTime * 2f);
+            transform.position += transform.forward*0.02f;
+            // Vector3 Normalize(Vector3 value);
+
+            //unit_previous_heading_vec = previous_heading_vec.normalized;
+            //transform.position -= transform.rotation*unit_previous_heading_vec*0.02f;
+            //previous_heading_vec = transform.position;
+            counter +=1;
+            if (counter % 100 == 0){
+                Instantiate(obstacle,transform.position,Quaternion.identity);
+            }
+            
+
+
+        }
+
+
+    }
+}
